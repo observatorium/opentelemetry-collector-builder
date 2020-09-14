@@ -4,7 +4,7 @@ This program generates a custom OpenTelemetry Collector binary based on a given 
 
 ## TL;DR
 ```console
-$ go install github.com/jpkroehling/opentelemetry-collector-builder
+$ go install github.com/observatorium/opentelemetry-collector-builder
 $ cat > ~/.otelcol-builder.yaml <<EOF
 exporters:
   - gomod: "github.com/open-telemetry/opentelemetry-collector-contrib/exporter/alibabacloudlogserviceexporter v0.9.0"
@@ -39,7 +39,7 @@ $ /tmp/dist/otelcol-custom --config=/tmp/otelcol.yaml
 ## Installation
 
 ```console
-$ go install github.com/jpkroehling/opentelemetry-collector-builder
+$ go install github.com/observatorium/opentelemetry-collector-builder
 ```
 
 ## Running
@@ -68,7 +68,7 @@ The `name` will typically be omitted, except when multiple components have the s
 
 ```yaml
 dist:
-    module: github.com/jpkroehling/opentelemetry-collector-builder # the module name for the new distribution, following Go mod conventions. Optional, but recommended.
+    module: github.com/observatorium/opentelemetry-collector-builder # the module name for the new distribution, following Go mod conventions. Optional, but recommended.
     name: otelcol-custom # the binary name. Optional.
     description: "Custom OpenTelemetry Collector distribution" # a long name for the application. Optional.
     output_path: /tmp/otelcol-distributionNNN # the path to write the output (sources and binary). Optional.

@@ -20,7 +20,7 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 
-	"github.com/jpkroehling/opentelemetry-collector-builder/internal/builder"
+	"github.com/observatorium/opentelemetry-collector-builder/internal/builder"
 )
 
 // Execute is the main entrypoint for this application

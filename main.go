@@ -14,7 +14,7 @@
 
 package main
 
-import "github.com/jpkroehling/opentelemetry-collector-builder/cmd"
+import "github.com/observatorium/opentelemetry-collector-builder/cmd"
 
 func main() {
 	cmd.Execute()

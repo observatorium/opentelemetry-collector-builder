@@ -22,7 +22,7 @@ import (
 	"path/filepath"
 	"text/template"
 
-	"github.com/jpkroehling/opentelemetry-collector-builder/internal/scaffold"
+	"github.com/observatorium/opentelemetry-collector-builder/internal/scaffold"
 )
 
 var (
