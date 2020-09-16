@@ -18,6 +18,7 @@ import (
 	"errors"
 	"fmt"
 	"io/ioutil"
+	"os"
 	"strings"
 
 	"github.com/go-logr/logr"
@@ -128,6 +129,15 @@ func parseModules(mods []Module) ([]Module, error) {
 		if len(mod.Name) == 0 {
 			parts := strings.Split(mod.Import, "/")
 			mod.Name = parts[len(parts)-1]
+		}
+
+		if strings.HasPrefix(mod.Path, "./") {
+			path, err := os.Getwd()
+			if err != nil {
+				return mods, fmt.Errorf("module has a relative Path element, but we couldn't get the current working dir: %v", err)
+			}
+
+			mod.Path = fmt.Sprintf("%s/%s", path, mod.Path[2:])
 		}
 
 		parsedModules = append(parsedModules, mod)

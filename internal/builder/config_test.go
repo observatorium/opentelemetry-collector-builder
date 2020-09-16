@@ -15,9 +15,12 @@
 package builder
 
 import (
+	"os"
+	"strings"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 func TestParseModules(t *testing.T) {
@@ -36,4 +39,24 @@ func TestParseModules(t *testing.T) {
 	assert.Equal(t, "github.com/org/repo v0.1.2", cfg.Extensions[0].GoMod)
 	assert.Equal(t, "github.com/org/repo", cfg.Extensions[0].Import)
 	assert.Equal(t, "repo", cfg.Extensions[0].Name)
+}
+
+func TestRelativePath(t *testing.T) {
+	// prepare
+	cfg := Config{
+		Extensions: []Module{{
+			GoMod: "some-module",
+			Path:  "./some-module",
+		}},
+	}
+
+	// test
+	err := cfg.ParseModules()
+	assert.NoError(t, err)
+
+	// verify
+	cwd, err := os.Getwd()
+	require.NoError(t, err)
+	assert.True(t, strings.HasPrefix(cfg.Extensions[0].Path, "/"))
+	assert.True(t, strings.HasPrefix(cfg.Extensions[0].Path, cwd))
 }
