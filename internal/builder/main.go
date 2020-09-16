@@ -45,16 +45,13 @@ func GenerateAndCompile(cfg Config) error {
 // Generate assembles a new distribution based on the given configuration
 func Generate(cfg Config) error {
 	// if the file does not exist, try to create it
-	_, err := os.Stat(cfg.Distribution.OutputPath)
-	if os.IsNotExist(err) {
-		if err := os.Mkdir(cfg.Distribution.OutputPath, 0644); err != nil {
-			return err
+	if _, err := os.Stat(cfg.Distribution.OutputPath); os.IsNotExist(err) {
+		if err := os.Mkdir(cfg.Distribution.OutputPath, 0755); err != nil {
+			return fmt.Errorf("failed to create output path: %w", err)
 		}
-	}
-
-	// something else happened
-	if err != nil {
-		return err
+	} else if err != nil {
+		// something else happened
+		return fmt.Errorf("failed to create output path: %w", err)
 	}
 
 	for _, file := range []struct {
@@ -76,7 +73,7 @@ func Generate(cfg Config) error {
 		},
 	} {
 		if err := processAndWrite(cfg, file.tmpl, file.outFile, cfg); err != nil {
-			return fmt.Errorf("failed: destination: %q, source: %q: %w", file.outFile, file.tmpl, err)
+			return fmt.Errorf("failed to generate source file with destination %q, source: %q: %w", file.outFile, file.tmpl, err)
 		}
 	}
 
@@ -92,13 +89,12 @@ func Compile(cfg Config) error {
 	}
 
 	cfg.Logger.Info("Compiling")
-	dest := fmt.Sprintf("%s/%s", cfg.Distribution.OutputPath, cfg.Distribution.ExeName)
-	cmd := exec.Command(cfg.Distribution.Go, "build", "-trimpath", "-o", dest, cfg.Distribution.OutputPath)
+	cmd := exec.Command(cfg.Distribution.Go, "build", "-trimpath", "-o", cfg.Distribution.ExeName)
 	cmd.Dir = cfg.Distribution.OutputPath
 	if out, err := cmd.CombinedOutput(); err != nil {
 		return fmt.Errorf("failed to compile the OpenTelemetry Collector distribution: %w. Output: %q", err, out)
 	}
-	cfg.Logger.Info("Compiled", "binary", dest)
+	cfg.Logger.Info("Compiled", "binary", fmt.Sprintf("%s/%s", cfg.Distribution.OutputPath, cfg.Distribution.ExeName))
 
 	return nil
 }

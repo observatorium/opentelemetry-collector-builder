@@ -54,6 +54,7 @@ type Module struct {
 	Name   string `mapstructure:"name"`   // if not specified, this is package part of the go mod (last part of the path)
 	Import string `mapstructure:"import"` // if not specified, this is the path part of the go mods
 	GoMod  string `mapstructure:"gomod"`  // a gomod-compatible spec for the module
+	Path   string `mapstructure:"path"`   // an optional path to the local version of this module
 }
 
 // DefaultConfig creates a new config, with default values

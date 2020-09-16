@@ -23,11 +23,13 @@ import (
 	"github.com/observatorium/opentelemetry-collector-builder/internal/builder"
 )
 
+var cfgFile string
+var cfg = builder.DefaultConfig()
+
 // Execute is the main entrypoint for this application
 func Execute() {
-	var cfgFile string
+	cobra.OnInitialize(initConfig)
 
-	cfg := builder.DefaultConfig()
 	cmd := &cobra.Command{
 		Use:  "otelcol-builder",
 		Long: "OpenTelemetry Collector distribution builder",
@@ -47,7 +49,7 @@ func Execute() {
 	}
 
 	// the external config file
-	cmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.otelcol-builder.yaml)")
+	cmd.Flags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.otelcol-builder.yaml)")
 
 	// the distribution parameters, which we accept as CLI flags as well
 	cmd.Flags().StringVar(&cfg.Distribution.ExeName, "name", "otelcol-custom", "The executable name for the OpenTelemetry Collector distribution")
@@ -60,6 +62,10 @@ func Execute() {
 	// tie Viper to flags
 	viper.BindPFlags(cmd.Flags())
 
+	cmd.Execute()
+}
+
+func initConfig() {
 	// a couple of Viper goodies, to make it easier to use env vars when flags are not desirable
 	viper.SetEnvKeyReplacer(strings.NewReplacer(".", "_"))
 	viper.AutomaticEnv()
@@ -82,6 +88,4 @@ func Execute() {
 		cfg.Logger.Error(err, "failed to parse the config")
 		return
 	}
-
-	cmd.Execute()
 }

@@ -34,4 +34,17 @@ require (
 	{{- end}}
 	go.opentelemetry.io/collector v0.9.0
 )
+
+{{- range .Extensions}}
+{{if ne .Path ""}}replace {{.GoMod}} => {{.Path}}{{end}}
+{{- end}}
+{{- range .Receivers}}
+{{if ne .Path ""}}replace {{.GoMod}} => {{.Path}}{{end}}
+{{- end}}
+{{- range .Exporters}}
+{{if ne .Path ""}}replace {{.GoMod}} => {{.Path}}{{end}}
+{{- end}}
+{{- range .Processors}}
+{{if ne .Path ""}}replace {{.GoMod}} => {{.Path}}{{end}}
+{{- end}}
 `
