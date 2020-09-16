@@ -31,7 +31,7 @@ func Execute() {
 	cobra.OnInitialize(initConfig)
 
 	cmd := &cobra.Command{
-		Use:  "otelcol-builder",
+		Use:  "opentelemetry-collector-builder",
 		Long: "OpenTelemetry Collector distribution builder",
 		RunE: func(cmd *cobra.Command, args []string) error {
 			if err := cfg.Validate(); err != nil {
@@ -55,6 +55,7 @@ func Execute() {
 	cmd.Flags().StringVar(&cfg.Distribution.ExeName, "name", "otelcol-custom", "The executable name for the OpenTelemetry Collector distribution")
 	cmd.Flags().StringVar(&cfg.Distribution.LongName, "description", "Custom OpenTelemetry Collector distribution", "A descriptive name for the OpenTelemetry Collector distribution")
 	cmd.Flags().StringVar(&cfg.Distribution.Version, "version", "1.0.0", "The version for the OpenTelemetry Collector distribution")
+	cmd.Flags().StringVar(&cfg.Distribution.OtelColVersion, "otelcol-version", cfg.Distribution.OtelColVersion, "Which version of OpenTelemetry Collector to use as base")
 	cmd.Flags().StringVar(&cfg.Distribution.OutputPath, "output-path", cfg.Distribution.OutputPath, "Where to write the resulting files")
 	cmd.Flags().StringVar(&cfg.Distribution.Go, "go", "/usr/bin/go", "The Go binary to use during the compilation phase")
 	cmd.Flags().StringVar(&cfg.Distribution.Module, "module", "github.com/jpkroehling/opentelemetry-collector-builder", "The Go module for the new distribution")

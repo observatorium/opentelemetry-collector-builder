@@ -32,7 +32,7 @@ require (
 	{{- range .Processors}}
 	{{.GoMod}}
 	{{- end}}
-	go.opentelemetry.io/collector v0.9.0
+	go.opentelemetry.io/collector v{{.Distribution.OtelColVersion}}
 )
 
 {{- range .Extensions}}

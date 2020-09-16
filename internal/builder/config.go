@@ -25,6 +25,8 @@ import (
 	"go.uber.org/zap"
 )
 
+const defaultOtelColVersion = "0.10.0"
+
 // ErrInvalidGoMod indicates an invalid gomod
 var ErrInvalidGoMod = errors.New("invalid gomod specification for module")
 
@@ -41,12 +43,13 @@ type Config struct {
 
 // Distribution holds the parameters for the final binary
 type Distribution struct {
-	Module     string `mapstructure:"module"`
-	ExeName    string `mapstructure:"name"`
-	Go         string `mapstructure:"go"`
-	LongName   string `mapstructure:"description"`
-	OutputPath string `mapstructure:"output_path"`
-	Version    string `mapstructure:"version"`
+	Module         string `mapstructure:"module"`
+	ExeName        string `mapstructure:"name"`
+	Go             string `mapstructure:"go"`
+	LongName       string `mapstructure:"description"`
+	OtelColVersion string `mapstructure:"otelcol_version"`
+	OutputPath     string `mapstructure:"output_path"`
+	Version        string `mapstructure:"version"`
 }
 
 // Module represents a receiver, exporter, processor or extension for the distribution
@@ -61,7 +64,7 @@ type Module struct {
 func DefaultConfig() Config {
 	zapLog, err := zap.NewDevelopment()
 	if err != nil {
-		panic(fmt.Sprintf("failed to obtain a logger instance (%v)?", err))
+		panic(fmt.Sprintf("failed to obtain a logger instance: %v", err))
 	}
 	log := zapr.NewLogger(zapLog)
 
@@ -73,7 +76,8 @@ func DefaultConfig() Config {
 	return Config{
 		Logger: log,
 		Distribution: Distribution{
-			OutputPath: outputDir,
+			OutputPath:     outputDir,
+			OtelColVersion: defaultOtelColVersion,
 		},
 	}
 }
