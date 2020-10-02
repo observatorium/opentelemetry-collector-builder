@@ -44,7 +44,7 @@ func main() {
 		log.Fatal("failed to construct the application: %w", err)
 	}
 
-	err = app.Start()
+	err = app.Run()
 	if err != nil {
 		log.Fatal("application run finished with error: %w", err)
 	}
