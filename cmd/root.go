@@ -69,11 +69,11 @@ func Execute() {
 
 	// tie Viper to flags
 	if err := viper.BindPFlags(cmd.Flags()); err != nil {
-		cfg.Logger.Error(err, "failed to bind flags: %w", err)
+		cfg.Logger.Error(err, "failed to bind flags")
 	}
 
 	if err := cmd.Execute(); err != nil {
-		cfg.Logger.Error(err, "failed to run: %w", err)
+		cfg.Logger.Error(err, "failed to run")
 	}
 }
 
