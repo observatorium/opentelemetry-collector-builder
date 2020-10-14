@@ -83,13 +83,19 @@ func Generate(cfg Config) error {
 
 // Compile generates a binary from the sources based on the configuration
 func Compile(cfg Config) error {
+	goBinary := cfg.Distribution.Go
 	// first, we test to check if we have Go at all
-	if _, err := exec.Command(cfg.Distribution.Go, "env").CombinedOutput(); err != nil {
-		return ErrGoNotFound
+	if _, err := exec.Command(goBinary, "env").CombinedOutput(); err != nil {
+		path, err := exec.LookPath("go")
+		if err != nil {
+			return ErrGoNotFound
+		}
+		goBinary = path
+		cfg.Logger.Info("Using go from PATH", "Go executable", path)
 	}
 
 	cfg.Logger.Info("Compiling")
-	cmd := exec.Command(cfg.Distribution.Go, "build", "-trimpath", "-o", cfg.Distribution.ExeName)
+	cmd := exec.Command(goBinary, "build", "-trimpath", "-o", cfg.Distribution.ExeName)
 	cmd.Dir = cfg.Distribution.OutputPath
 	if out, err := cmd.CombinedOutput(); err != nil {
 		return fmt.Errorf("failed to compile the OpenTelemetry Collector distribution: %w. Output: %q", err, out)
