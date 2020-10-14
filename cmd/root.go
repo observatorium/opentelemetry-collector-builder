@@ -15,6 +15,7 @@
 package cmd
 
 import (
+	"fmt"
 	"strings"
 
 	"github.com/spf13/cobra"
@@ -23,8 +24,13 @@ import (
 	"github.com/observatorium/opentelemetry-collector-builder/internal/builder"
 )
 
-var cfgFile string
-var cfg = builder.DefaultConfig()
+var (
+	version = "dev"
+	date    = "unknown"
+
+	cfgFile string
+	cfg     = builder.DefaultConfig()
+)
 
 // Execute is the main entrypoint for this application
 func Execute() {
@@ -32,8 +38,9 @@ func Execute() {
 
 	cmd := &cobra.Command{
 		Use:  "opentelemetry-collector-builder",
-		Long: "OpenTelemetry Collector distribution builder",
+		Long: fmt.Sprintf("OpenTelemetry Collector distribution builder (%s)", version),
 		RunE: func(cmd *cobra.Command, args []string) error {
+
 			if err := cfg.Validate(); err != nil {
 				cfg.Logger.Error(err, "invalid configuration: %w", err)
 				return nil
@@ -71,6 +78,8 @@ func Execute() {
 }
 
 func initConfig() {
+	cfg.Logger.Info("OpenTelemetry Collector distribution builder", "version", version, "date", date)
+
 	// a couple of Viper goodies, to make it easier to use env vars when flags are not desirable
 	viper.SetEnvKeyReplacer(strings.NewReplacer(".", "_"))
 	viper.AutomaticEnv()
