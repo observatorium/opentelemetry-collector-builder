@@ -107,6 +107,10 @@ func Compile(cfg Config) error {
 
 func processAndWrite(cfg Config, tmpl string, outFile string, tmplParams interface{}) error {
 	t, err := template.New("template").Parse(tmpl)
+	if err != nil {
+		return err
+	}
+
 	out, err := os.Create(filepath.Join(cfg.Distribution.OutputPath, outFile))
 	if err != nil {
 		return err

@@ -61,9 +61,13 @@ func Execute() {
 	cmd.Flags().StringVar(&cfg.Distribution.Module, "module", "github.com/jpkroehling/opentelemetry-collector-builder", "The Go module for the new distribution")
 
 	// tie Viper to flags
-	viper.BindPFlags(cmd.Flags())
+	if err := viper.BindPFlags(cmd.Flags()); err != nil {
+		cfg.Logger.Error(err, "failed to bind flags: %w", err)
+	}
 
-	cmd.Execute()
+	if err := cmd.Execute(); err != nil {
+		cfg.Logger.Error(err, "failed to run: %w", err)
+	}
 }
 
 func initConfig() {
