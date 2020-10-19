@@ -66,6 +66,8 @@ The `import` might specify a more specific path than what is specified in the `g
 
 The `name` will typically be omitted, except when multiple components have the same name. In such case, set a unique name for each module.
 
+Optionally, a list of `go mod` replace entries can be provided, in case custom overrides are needed. This is typically necessary when a processor or some of its transitive dependencies have dependency problems.
+
 ```yaml
 dist:
     module: github.com/observatorium/opentelemetry-collector-builder # the module name for the new distribution, following Go mod conventions. Optional, but recommended.
@@ -80,4 +82,7 @@ exporters:
     import: "github.com/open-telemetry/opentelemetry-collector-contrib/exporter/alibabacloudlogserviceexporter" # the import path for the component. Optional.
     name: "alibabacloudlogserviceexporter" # package name to use in the generated sources. Optional.
     path: "./alibabacloudlogserviceexporter" # in case a local version should be used for the module, the path relative to the current dir, or a full path can be specified. Optional.
+replaces:
+  # a list of "replaces" directives that will be part of the resulting go.mod
+  - github.com/open-telemetry/opentelemetry-collector-contrib/internal/common => github.com/open-telemetry/opentelemetry-collector-contrib/internal/common v0.12.0
 ```

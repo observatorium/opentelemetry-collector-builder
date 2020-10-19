@@ -47,4 +47,7 @@ require (
 {{- range .Processors}}
 {{if ne .Path ""}}replace {{.GoMod}} => {{.Path}}{{end}}
 {{- end}}
+{{- range .Replaces}}
+replace {{.}}
+{{- end}}
 `

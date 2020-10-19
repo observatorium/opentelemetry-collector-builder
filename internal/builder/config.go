@@ -40,6 +40,7 @@ type Config struct {
 	Extensions   []Module     `mapstructure:"extensions"`
 	Receivers    []Module     `mapstructure:"receivers"`
 	Processors   []Module     `mapstructure:"processors"`
+	Replaces     []string     `mapstructure:"replaces"`
 }
 
 // Distribution holds the parameters for the final binary
