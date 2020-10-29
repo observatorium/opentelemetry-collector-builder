@@ -9,10 +9,10 @@ pull_request_rules:
     conditions:
       - "#approved-reviews-by>=1"
       - "-draft"
-      - "status-success=build"
-      - "status-success=lint"
-      - "status-success=security"
-      - "status-success=integration-test"
+      - "status-success=Unit tests"
+      - "status-success=Code standards (linting)"
+      - "status-success=Security"
+      - "status-success=Integration test"
     actions:
       merge:
         method: squash
