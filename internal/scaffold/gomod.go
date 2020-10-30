@@ -21,16 +21,16 @@ go 1.14
 
 require (
 	{{- range .Extensions}}
-	{{.GoMod}}
+	{{if .GoMod}}{{.GoMod}}{{end}}
 	{{- end}}
 	{{- range .Receivers}}
-	{{.GoMod}}
+	{{if .GoMod}}{{.GoMod}}{{end}}
 	{{- end}}
 	{{- range .Exporters}}
-	{{.GoMod}}
+	{{if .GoMod}}{{.GoMod}}{{end}}
 	{{- end}}
 	{{- range .Processors}}
-	{{.GoMod}}
+	{{if .GoMod}}{{.GoMod}}{{end}}
 	{{- end}}
 	go.opentelemetry.io/collector v{{.Distribution.OtelColVersion}}
 )

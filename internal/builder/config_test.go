@@ -15,6 +15,7 @@
 package builder
 
 import (
+	"errors"
 	"os"
 	"strings"
 	"testing"
@@ -59,4 +60,37 @@ func TestRelativePath(t *testing.T) {
 	require.NoError(t, err)
 	assert.True(t, strings.HasPrefix(cfg.Extensions[0].Path, "/"))
 	assert.True(t, strings.HasPrefix(cfg.Extensions[0].Path, cwd))
+}
+
+func TestModuleFromCore(t *testing.T) {
+	// prepare
+	cfg := Config{
+		Extensions: []Module{{
+			Core:   true,
+			Import: "go.opentelemetry.io/collector/receiver/jaegerreceiver",
+		}},
+	}
+
+	// test
+	err := cfg.ParseModules()
+	assert.NoError(t, err)
+
+	// verify
+	assert.True(t, strings.HasPrefix(cfg.Extensions[0].Name, "jaegerreceiver"))
+	assert.Empty(t, cfg.Extensions[0].GoMod)
+}
+
+func TestInvalidModule(t *testing.T) {
+	// prepare
+	cfg := Config{
+		Extensions: []Module{{
+			Import: "go.opentelemetry.io/collector/receiver/jaegerreceiver",
+		}},
+	}
+
+	// test
+	err := cfg.ParseModules()
+
+	// verify
+	assert.True(t, errors.Is(err, ErrInvalidGoMod))
 }

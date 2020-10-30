@@ -50,6 +50,7 @@ type Distribution struct {
 	Go             string `mapstructure:"go"`
 	LongName       string `mapstructure:"description"`
 	OtelColVersion string `mapstructure:"otelcol_version"`
+	IncludeCore    bool   `mapstructure:"include_core"`
 	OutputPath     string `mapstructure:"output_path"`
 	Version        string `mapstructure:"version"`
 }
@@ -60,6 +61,7 @@ type Module struct {
 	Import string `mapstructure:"import"` // if not specified, this is the path part of the go mods
 	GoMod  string `mapstructure:"gomod"`  // a gomod-compatible spec for the module
 	Path   string `mapstructure:"path"`   // an optional path to the local version of this module
+	Core   bool   `mapstructure:"core"`   // whether this module comes from core, meaning that no further dependencies will be added
 }
 
 // DefaultConfig creates a new config, with default values
@@ -119,7 +121,7 @@ func (c *Config) ParseModules() error {
 func parseModules(mods []Module) ([]Module, error) {
 	parsedModules := []Module{}
 	for _, mod := range mods {
-		if len(mod.GoMod) == 0 {
+		if len(mod.GoMod) == 0 && !mod.Core {
 			return mods, fmt.Errorf("%w, module: %q", ErrInvalidGoMod, mod.GoMod)
 		}
 

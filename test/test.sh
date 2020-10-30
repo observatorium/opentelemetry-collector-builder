@@ -3,7 +3,7 @@
 # each attempt pauses for 100ms before retrying
 max_retries=50
 
-tests=replaces
+tests="replaces nocore"
 
 base=`mktemp -d`
 echo "Running the tests in ${base}"
