@@ -5,7 +5,7 @@ builds:
   - flags:
       - -trimpath
     ldflags:
-     - -s -w -X github.com/observatorium/opentelemetry-collector-builder/cmd.version={{.Version}} -X github.com/observatorium/opentelemetry-collector-builder/cmd.date={{.Date}}
+      - -s -w -X github.com/observatorium/opentelemetry-collector-builder/cmd.version={{.Version}} -X github.com/observatorium/opentelemetry-collector-builder/cmd.date={{.Date}}
     env:
       - CGO_ENABLED=0
     goos:
@@ -19,6 +19,9 @@ builds:
     goarm:
       - 6
       - 7
+    hooks:
+      post:
+        - upx "{{ .Path }}"
 archives:
   - format: binary
     replacements:
