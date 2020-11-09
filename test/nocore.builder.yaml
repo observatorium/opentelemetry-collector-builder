@@ -1,6 +1,6 @@
 dist:
   module: github.com/observatorium/opentelemetry-collector-builder/test/nocore
-  otelcol_version: 0.13.0
+  otelcol_version: 0.14.0
   include_core: false
 
 receivers:
