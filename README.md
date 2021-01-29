@@ -58,7 +58,7 @@ The configuration file is composed of two main parts: `dist` and module types. A
 $ opentelemetry-collector-builder --name="my-otelcol"
 ```
 
-The module types are specified at the top-level, and might be: `extensions`, `exporters`, `receivers` and `processors`. They all accept a list of components, and each component is required to have at least the `gomod` entry. When not specified, the `import` value is inferred from the `gomod`. When not specified, the `name` is inferred from the `import`.
+The module types are specified at the top-level, and might be: `extensions`, `exporters`, `receivers` and `processors`. They all accept a list of components, and each component is required to have at least the `gomod` entry when using contrib modules. When not specified, the `import` value is inferred from the `gomod`. When not specified, the `name` is inferred from the `import`.
 
 The `import` might specify a more specific path than what is specified in the `gomod`. For instance, your Go module might be `gitlab.com/myorg/myrepo` and the `import` might be `gitlab.com/myorg/myrepo/myexporter`.
 
@@ -84,4 +84,18 @@ exporters:
 replaces:
   # a list of "replaces" directives that will be part of the resulting go.mod
   - github.com/open-telemetry/opentelemetry-collector-contrib/internal/common => github.com/open-telemetry/opentelemetry-collector-contrib/internal/common v0.19.0
+```
+
+If you want to include the whole core OpenTelemetry Collector in your resulting image then use the boolean flag `include_core` in the `dist` section of the configuration. However, if you only want to include certain core modules in your image, you only need to specify the `import` and `include_core: true` in the modules sections. The `gomod` key is not required. For example:
+
+```yaml
+dist:
+    module: github.com/observatorium/opentelemetry-collector-builder
+    name: otelcol
+    description: "Custom core otel image"
+    include_core: false
+    otelcol_version: "0.18.0"
+receivers:
+  - import: "go.opentelemetry.io/collector/receiver/jaegerreceiver"
+    core: true
 ```
