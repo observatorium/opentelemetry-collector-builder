@@ -2,6 +2,8 @@
 
 This program generates a custom OpenTelemetry Collector binary based on a given configuration.
 
+**ATTENTION:** this repository is deprecated, in favor of the one hosted at the [open-telemetry organization](https://github.com/open-telemetry/opentelemetry-collector-builder). The versions 0.5.0 (this repository) and 0.6.0 are equivalent and can be used interchangeably.
+
 ## TL;DR
 ```console
 $ go get github.com/observatorium/opentelemetry-collector-builder
